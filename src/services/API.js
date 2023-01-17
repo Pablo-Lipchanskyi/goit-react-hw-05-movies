@@ -1,22 +1,13 @@
 import axios from 'axios';
-const URL = 'https://api.themoviedb.org/3'
 const API_KEY = 'eb3837528c14261d8a5e32c0d2687a2a'
-const GET_TRENDING = '/trending/movie/day';
 
-export const searchFilm = async () => {
-  try {
-    const searchParams = new URLSearchParams({
-        key: API_KEY,
-        language: 'en '
-    });
+axios.defaults.baseURL = 'https://api.themoviedb.org';
+async function fetchFilms(queryType = 'trending/movie/day', searchedFilm = '') {
+  const response = await axios.get(
+    `/3/${queryType}?api_key=${API_KEY}${searchedFilm}`
+  );
+  console.log(response.data);
+  return response.data;
+}
 
-    const url = `${URL}${GET_TRENDING}?${searchParams}`;
-    const response = await axios.get(url);
-    if (!response.status) {
-      throw new Error('Something goes wrong');
-    }
-    return response.data;
-  } catch (error) {
-    console.log(error.message);
-  }
-};
+export default fetchFilms;
