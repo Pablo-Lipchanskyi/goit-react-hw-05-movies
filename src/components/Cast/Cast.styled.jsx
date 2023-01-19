@@ -13,6 +13,8 @@ export const CastListStyled = styled.ul`
 `;
 
 export const CastItemStyled = styled.li`
+  display: flex;
+  flex-direction: column;
   width: calc((100% - 300px) / 10);
   margin: 15px;
 `;
