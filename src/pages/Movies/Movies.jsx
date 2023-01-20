@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import Searchbar from 'components/Searchbar/Searchbar';
+import Searchbar from 'components/SearchBar/Searchbar';
 import MoviesList from 'components/MoviesList/MoviesList';
 import { MoviesStyled } from './Movies.styled';
 import { searchMovies } from 'services/MovieApi';
