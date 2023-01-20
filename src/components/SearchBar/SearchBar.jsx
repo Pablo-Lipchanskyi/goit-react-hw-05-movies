@@ -6,7 +6,7 @@ import {
   SearchbarStyled,
   SearchFormStyled,
   SearchFormInputStyled,
-} from './SearchBar.styled';
+} from './Searchbar.styled';
 import { IconButton } from './IconButton/IconButton';
 import { ReactComponent as SearchIcon } from '../../icons/search.svg';
 

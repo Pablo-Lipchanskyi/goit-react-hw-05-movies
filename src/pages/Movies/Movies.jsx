@@ -1,52 +1,42 @@
 import { useState, useEffect } from 'react';
-// import PropTypes from 'prop-types';
+import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import Searchbar from 'components/Searchbar/Searchbar';
 import MoviesList from 'components/MoviesList/MoviesList';
-import Searchbar from 'components/SearchBar/SearchBar';
-import fetchFilms from 'servises/fetchApi';
 import { MoviesStyled } from './Movies.styled';
+import { searchMovies } from 'services/MovieApi';
 
 export default function Movies() {
   const [movies, setMovies] = useState(null);
-  const [query, setQuery] = useState(null);
-  const add = '';
+  const [searchParams, setSearchParams] = useSearchParams();
+  const query = searchParams.get('query') ?? '';
 
   const handleSubmit = query => {
     setMovies(null);
-    setQuery(query);
+    setSearchParams({ query });
   };
 
   useEffect(() => {
-    if (!query) {
+    if (query === '') {
       return;
     }
 
-    const getSearchedFilmsList = async () => {
+    const getSearchResults = async () => {
       try {
-        const queryType = `search/movie`;
-        const searchedFilm = `&query=${query}`;
-        const { results } = await fetchFilms(queryType, searchedFilm);
+        const results = await searchMovies(query);
         results.length > 0 ? setMovies(results) : toast.error('No matches :(');
       } catch (error) {
-        toast.error('Whoops, something went wrong: ', error.message);
+        toast.error('Whoops, something went wrong. ', error.message);
         return;
       }
     };
-    getSearchedFilmsList();
+    getSearchResults();
   }, [query]);
 
   return (
     <MoviesStyled>
       <Searchbar onSubmit={handleSubmit} />
-      {movies && <MoviesList movies={movies} add={add} />}
+      {movies && <MoviesList movies={movies} />}
     </MoviesStyled>
   );
 }
-
-Movies.propTypes = {
-  //   onSubmit: PropTypes.func.isRequired,
-};
-
-// https://api.themoviedb.org/3/search/movie?api_key={api_key}&query=Jack+Reacher
-
-// https://api.themoviedb.org/3/trending/movie/day?api_key={api_key}

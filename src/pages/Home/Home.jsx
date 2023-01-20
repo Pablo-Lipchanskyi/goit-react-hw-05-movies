@@ -1,21 +1,19 @@
 import { useState, useEffect } from 'react';
-// import PropTypes from 'prop-types';
-import MoviesList from 'components/MoviesList/MoviesList';
-import { HomeStyled } from './Home.styled';
-import fetchFilms from 'servises/fetchApi';
 import { toast } from 'react-toastify';
+import { HomeStyled, TrendingTitleStyled } from './Home.styled';
+import MoviesList from 'components/MoviesList/MoviesList';
+import { getTrendingMovies } from 'services/MovieApi';
 
 export default function Home() {
   const [movies, setMovies] = useState(null);
-  const add = 'movies/';
 
   useEffect(() => {
     const getMovies = async () => {
       try {
-        const { results } = await fetchFilms();
-        setMovies(results);
+        const movies = await getTrendingMovies();
+        setMovies(movies);
       } catch (error) {
-        toast.error('Whoops, something went wrong: ', error.message);
+        toast.error('Whoops, something went wrong ', error.message);
         return;
       }
     };
@@ -23,12 +21,13 @@ export default function Home() {
   }, []);
 
   return (
-    <HomeStyled>
-      {movies && <MoviesList movies={movies} add={add}></MoviesList>}
-    </HomeStyled>
+    <>
+      {movies && (
+        <HomeStyled>
+          <TrendingTitleStyled>Trending today</TrendingTitleStyled>
+          <MoviesList movies={movies} path={'movies/'}></MoviesList>
+        </HomeStyled>
+      )}
+    </>
   );
 }
-
-// Home.propTypes = {
-//     onSubmit: PropTypes.func.isRequired,
-// };
